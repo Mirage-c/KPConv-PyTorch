@@ -182,7 +182,8 @@ class KPCNN(nn.Module):
         predicted = torch.argmax(outputs.data, dim=1)
         total = labels.size(0)
         correct = (predicted == labels).sum().item()
-
+        # print("predicted: ", predicted)
+        # print("label: ", labels)
         return correct / total
 
 

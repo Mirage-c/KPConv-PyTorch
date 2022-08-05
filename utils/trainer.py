@@ -94,7 +94,7 @@ class ModelTrainer:
         ##########################
         # Load previous checkpoint
         ##########################
-
+        chkp_path = "/mnt/disk1/chentuo/PointNet/KPConv-PyTorch/results/Log_2022-08-04_15-17-48/checkpoints/current_chkp.tar"
         if (chkp_path is not None):
             if finetune:
                 checkpoint = torch.load(chkp_path)
@@ -104,7 +104,7 @@ class ModelTrainer:
             else:
                 checkpoint = torch.load(chkp_path)
                 net.load_state_dict(checkpoint['model_state_dict'])
-                self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+                # self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
                 self.epoch = checkpoint['epoch']
                 net.train()
                 print("Model and training state restored.")
@@ -245,9 +245,9 @@ class ModelTrainer:
                 break
 
             # Update learning rate
-            if self.epoch in config.lr_decays:
-                for param_group in self.optimizer.param_groups:
-                    param_group['lr'] *= config.lr_decays[self.epoch]
+            # if self.epoch in config.lr_decays:
+            #     for param_group in self.optimizer.param_groups:
+            #         param_group['lr'] *= config.lr_decays[self.epoch]
 
             # Update epoch
             self.epoch += 1
@@ -267,7 +267,7 @@ class ModelTrainer:
                 # Save checkpoints occasionally
                 if (self.epoch + 1) % config.checkpoint_gap == 0:
                     checkpoint_path = join(checkpoint_directory, 'chkp_{:04d}.tar'.format(self.epoch + 1))
-                    torch.save(save_dict, checkpoint_path)
+                    torch.save(save_dict, checkpoint_path, _use_new_zipfile_serialization=False)
 
             # Validation
             net.eval()
